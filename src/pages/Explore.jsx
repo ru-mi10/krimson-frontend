@@ -217,7 +217,7 @@ const Explore = () => {
 
         {/* Results */}
         {loading ? (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : systems.length === 0 ? (
@@ -245,7 +245,7 @@ const Explore = () => {
             <p className="text-xs" style={{ color: '#3F3F46' }}>
               {systems.length} System{systems.length !== 1 ? 's' : ''}
             </p>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {systems.map(system => (
                 <SystemCard key={system._id} system={system}
                   onClick={() => navigate(`/systems/${system.slug}/public`)} />

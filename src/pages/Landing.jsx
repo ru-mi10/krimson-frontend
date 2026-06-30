@@ -110,7 +110,7 @@ const Landing = () => {
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#09090B', color: '#FAFAFA' }}>
 
       {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b"
+      <nav className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5 border-b"
         style={{ borderColor: '#27272A' }}>
         <Logo size="md" />
         <div className="flex items-center gap-3">
@@ -140,7 +140,7 @@ const Landing = () => {
 
       {/* Hero */}
       <div className="flex-1 flex items-center">
-        <div className="w-full max-w-7xl mx-auto px-8 py-20 grid grid-cols-2 gap-20 items-center">
+        <div className="w-full max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* Left */}
           <div className="flex flex-col gap-8 transition-all duration-1000"
@@ -155,12 +155,12 @@ const Landing = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h1 className="font-bold leading-none tracking-tight"
-                style={{ fontSize: '52px', color: '#FAFAFA' }}>
+              <h1 className="font-bold leading-none tracking-tight text-4xl md:text-[52px]"
+                style={{ color: '#FAFAFA' }}>
                 Build UI Systems.
               </h1>
-              <h1 className="font-bold leading-none tracking-tight"
-                style={{ fontSize: '52px', color: '#27272A' }}>
+              <h1 className="font-bold leading-none tracking-tight text-4xl md:text-[52px]"
+                style={{ color: '#27272A' }}>
                 Not just components.
               </h1>
             </div>
@@ -202,7 +202,7 @@ const Landing = () => {
           </div>
 
           {/* Right */}
-          <div className="transition-all duration-1000"
+          <div className="hidden lg:block transition-all duration-1000"
             style={{
               opacity: mounted ? 1 : 0,
               transform: mounted ? 'translateY(0)' : 'translateY(24px)',
@@ -235,12 +235,12 @@ const Landing = () => {
 
       {/* How it works */}
       <div className="border-t" style={{ borderColor: '#18181B' }}>
-        <div className="max-w-7xl mx-auto px-8 py-20">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-20">
           <p className="text-xs font-medium tracking-widest uppercase mb-12 text-center"
             style={{ color: '#3F3F46' }}>
             How Krimson works
           </p>
-          <div className="grid grid-cols-4 gap-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
             {[
               { step: '01', title: 'Create a System', desc: 'Name your product foundation. Add a description and category.' },
               { step: '02', title: 'Define Pages', desc: 'Add product surfaces — Dashboard, Analytics, Billing, Settings.' },

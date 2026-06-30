@@ -99,7 +99,7 @@ const SystemPublic = () => {
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-8 py-12 flex flex-col gap-10">
+      <div className="max-w-5xl mx-auto px-5 md:px-8 py-8 md:py-12 flex flex-col gap-10">
 
         {/* Back */}
         <button onClick={() => navigate('/explore')}
@@ -111,7 +111,7 @@ const SystemPublic = () => {
         </button>
 
         {/* System header */}
-        <div className="flex items-start justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold flex-shrink-0"
               style={{ backgroundColor: '#DC262620', color: '#DC2626' }}>
@@ -193,7 +193,7 @@ const SystemPublic = () => {
         </div>
 
         {/* Main content */}
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* Pages */}
           <div className="col-span-2 flex flex-col gap-4">

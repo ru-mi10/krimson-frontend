@@ -565,7 +565,7 @@ const SystemExplorer = () => {
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#09090B' }}>
 
       {/* Top bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b"
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 md:px-6 py-3 md:py-4 border-b"
         style={{ borderColor: '#27272A', backgroundColor: '#09090B' }}>
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/dashboard')}
@@ -609,12 +609,12 @@ const SystemExplorer = () => {
         </div>
       </div>
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col md:flex-row">
         {/* Left sidebar */}
-        <div className="w-48 flex-shrink-0 border-r flex flex-col py-4"
+        <div className="w-full md:w-48 flex-shrink-0 border-r-0 md:border-r border-b md:border-b-0 flex flex-col py-2 md:py-4"
           style={{ borderColor: '#27272A', backgroundColor: '#09090B' }}>
-          {/* System info */}
-          <div className="px-4 pb-4 mb-4 border-b" style={{ borderColor: '#18181B' }}>
+          {/* System info - hidden on mobile to save space */}
+          <div className="hidden md:block px-4 pb-4 mb-4 border-b" style={{ borderColor: '#18181B' }}>
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold mb-2"
               style={{ backgroundColor: '#DC262620', color: '#DC2626' }}>
               {system?.name?.[0]}
@@ -624,10 +624,10 @@ const SystemExplorer = () => {
           </div>
 
           {/* Nav */}
-          <nav className="flex flex-col gap-0.5 px-2">
+          <nav className="flex flex-row md:flex-col gap-0.5 px-2 overflow-x-auto">
             {SECTIONS.map(({ key, label, icon: Icon }) => (
               <button key={key} onClick={() => setSection(key)}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150 text-left"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150 text-left flex-shrink-0"
                 style={{
                   backgroundColor: section === key ? '#18181B' : 'transparent',
                   color: section === key ? '#FAFAFA' : '#52525B',
@@ -635,10 +635,10 @@ const SystemExplorer = () => {
                 <Icon size={14} />
                 {label}
                 {key === 'pages' && pages.length > 0 && (
-                  <span className="ml-auto text-xs" style={{ color: '#3F3F46' }}>{pages.length}</span>
+                  <span className="hidden md:inline ml-auto text-xs" style={{ color: '#3F3F46' }}>{pages.length}</span>
                 )}
                 {key === 'versions' && versions.length > 0 && (
-                  <span className="ml-auto text-xs" style={{ color: '#3F3F46' }}>{versions.length}</span>
+                  <span className="hidden md:inline ml-auto text-xs" style={{ color: '#3F3F46' }}>{versions.length}</span>
                 )}
               </button>
             ))}
@@ -646,7 +646,7 @@ const SystemExplorer = () => {
         </div>
 
         {/* Main canvas */}
-        <div className="flex-1 p-8 overflow-y-auto">
+        <div className="flex-1 p-5 md:p-8 overflow-y-auto">
           <div className="max-w-3xl mx-auto">
             {section === 'pages' && (
               <PagesSection system={system} pages={pages} setPages={setPages} />

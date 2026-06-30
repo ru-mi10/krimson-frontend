@@ -1,7 +1,7 @@
 // src/pages/Dashboard.jsx
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, GitFork, Clock, ArrowRight, Layers } from 'lucide-react'
+import { Plus, GitFork, Eye, Clock, ArrowRight, Layers } from 'lucide-react'
 import client from '../api/client'
 import useAuth from '../hooks/useAuth'
 import Button from '../components/ui/Button'
@@ -27,6 +27,8 @@ const SystemCard = ({ system, onClick }) => {
       style={{ backgroundColor: '#111113', borderColor: '#27272A' }}
       onMouseEnter={e => e.currentTarget.style.borderColor = '#3F3F46'}
       onMouseLeave={e => e.currentTarget.style.borderColor = '#27272A'}>
+
+      {/* Top row */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1 min-w-0">
           <span className="text-sm font-semibold truncate" style={{ color: '#FAFAFA' }}>
@@ -41,6 +43,8 @@ const SystemCard = ({ system, onClick }) => {
         <ArrowRight size={14} className="flex-shrink-0 mt-0.5 transition-transform duration-150 group-hover:translate-x-0.5"
           style={{ color: '#3F3F46' }} />
       </div>
+
+      {/* Meta */}
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-xs px-2 py-0.5 rounded-full border"
           style={{ color: s.text, backgroundColor: s.bg, borderColor: s.border }}>
@@ -52,6 +56,8 @@ const SystemCard = ({ system, onClick }) => {
           </span>
         )}
       </div>
+
+      {/* Stats */}
       <div className="flex items-center gap-4 pt-3 border-t" style={{ borderColor: '#1C1C1F' }}>
         <div className="flex items-center gap-1.5">
           <Layers size={11} style={{ color: '#3F3F46' }} />
@@ -84,7 +90,9 @@ const EmptyState = ({ onCreateClick }) => (
     </div>
     <div className="text-center flex flex-col gap-1.5">
       <p className="text-sm font-medium" style={{ color: '#FAFAFA' }}>No Systems yet</p>
-      <p className="text-xs" style={{ color: '#52525B' }}>Create your first System to start building.</p>
+      <p className="text-xs" style={{ color: '#52525B' }}>
+        Create your first System to start building.
+      </p>
     </div>
     <Button onClick={onCreateClick} size="md">
       <Plus size={14} /> Create System
@@ -103,6 +111,7 @@ const Dashboard = () => {
     const fetchSystems = async () => {
       try {
         const { data } = await client.get('/systems')
+        // Fetch page counts
         const withCounts = await Promise.all(
           data.systems.map(async (s) => {
             try {
@@ -124,6 +133,7 @@ const Dashboard = () => {
   }, [])
 
   const filtered = filter === 'all' ? systems : systems.filter(s => s.status === filter)
+
   const counts = {
     all: systems.length,
     draft: systems.filter(s => s.status === 'draft').length,
@@ -133,13 +143,17 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen p-8" style={{ backgroundColor: '#09090B' }}>
       <div className="max-w-5xl mx-auto flex flex-col gap-8">
+
+        {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-xl font-semibold" style={{ color: '#FAFAFA' }}>
               {user?.fullName?.split(' ')[0]}'s Workspace
             </h1>
             <p className="text-sm" style={{ color: '#52525B' }}>
-              {counts.all === 0 ? 'No Systems yet' : `${counts.all} System${counts.all !== 1 ? 's' : ''}`}
+              {counts.all === 0
+                ? 'No Systems yet'
+                : `${counts.all} System${counts.all !== 1 ? 's' : ''}`}
             </p>
           </div>
           <Button onClick={() => navigate('/systems/create')}>
@@ -147,8 +161,9 @@ const Dashboard = () => {
           </Button>
         </div>
 
+        {/* Filter tabs */}
         {counts.all > 0 && (
-          <div className="flex items-center gap-1 border-b" style={{ borderColor: '#18181B' }}>
+          <div className="flex items-center gap-1 border-b pb-0" style={{ borderColor: '#18181B' }}>
             {[
               { key: 'all', label: 'All', count: counts.all },
               { key: 'draft', label: 'Draft', count: counts.draft },
@@ -174,8 +189,9 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Content */}
         {loading ? (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="rounded-xl border p-5 flex flex-col gap-4 animate-pulse"
                 style={{ backgroundColor: '#111113', borderColor: '#27272A' }}>
@@ -188,10 +204,13 @@ const Dashboard = () => {
         ) : filtered.length === 0 ? (
           <EmptyState onCreateClick={() => navigate('/systems/create')} />
         ) : (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(system => (
-              <SystemCard key={system._id} system={system}
-                onClick={() => navigate(`/systems/${system.slug}`)} />
+              <SystemCard
+                key={system._id}
+                system={system}
+                onClick={() => navigate(`/systems/${system.slug}`)}
+              />
             ))}
           </div>
         )}
