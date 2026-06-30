@@ -107,7 +107,7 @@ const Landing = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#09090B', color: '#FAFAFA' }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: '#09090B', color: '#FAFAFA' }}>
 
       {/* Nav */}
       <nav className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5 border-b"
@@ -240,14 +240,14 @@ const Landing = () => {
             style={{ color: '#3F3F46' }}>
             How Krimson works
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
             {[
               { step: '01', title: 'Create a System', desc: 'Name your product foundation. Add a description and category.' },
               { step: '02', title: 'Define Pages', desc: 'Add product surfaces — Dashboard, Analytics, Billing, Settings.' },
               { step: '03', title: 'Set the Theme', desc: 'One theme controls the entire System. Colors, type, motion.' },
               { step: '04', title: 'Version & Publish', desc: 'Snapshot your System. Publish it. Let others fork and evolve it.' },
             ].map(({ step, title, desc }) => (
-              <div key={step} className="flex items-start gap-4 px-6 border-l first:border-l-0"
+              <div key={step} className="flex items-start gap-4 md:px-6 md:border-l md:first:border-l-0"
                 style={{ borderColor: '#18181B' }}>
                 <span className="text-xs font-mono mt-0.5 flex-shrink-0"
                   style={{ color: '#DC2626' }}>{step}</span>
