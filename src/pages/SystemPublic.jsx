@@ -199,7 +199,13 @@ const SystemPublic = () => {
           <div className="col-span-2 flex flex-col gap-4">
             <h2 className="text-sm font-semibold" style={{ color: '#FAFAFA' }}>Pages</h2>
             <div className="flex flex-col gap-1">
-              {pages.map((page, i) => (
+              {pages.length === 0 ? (
+                <div className="flex items-center justify-center py-8 rounded-lg border border-dashed"
+                  style={{ borderColor: '#27272A' }}>
+                  <p className="text-xs" style={{ color: '#52525B' }}>No pages in this System yet.</p>
+                </div>
+              ) : (
+                pages.map((page, i) => (
                 <div key={page._id}
                   className="flex items-center gap-4 px-4 py-3.5 rounded-lg border"
                   style={{ backgroundColor: '#111113', borderColor: '#27272A' }}>
@@ -213,7 +219,8 @@ const SystemPublic = () => {
                   </div>
                   <span className="text-xs font-mono" style={{ color: '#3F3F46' }}>/{page.slug}</span>
                 </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
