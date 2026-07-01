@@ -262,7 +262,7 @@ const Landing = () => {
       </div>
 
       {/* Footer */}
-      <div className="border-t px-8 py-6 flex items-center justify-between"
+      <div className="border-t px-5 md:px-8 py-6 flex items-center justify-between"
         style={{ borderColor: '#18181B' }}>
         <Logo size="sm" />
         <span className="text-xs" style={{ color: '#3F3F46' }}>

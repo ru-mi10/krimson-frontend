@@ -1,6 +1,6 @@
 // src/layouts/AppLayout.jsx
-import { useState } from 'react'
-import { Navigate, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Navigate, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { LayoutDashboard, Compass, Plus, LogOut, Menu, X } from 'lucide-react'
 import useAuth from '../hooks/useAuth'
 import Logo from '../components/ui/Logo'
@@ -13,7 +13,12 @@ const nav = [
 const AppLayout = () => {
   const { isAuthenticated, isLoading, user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location.pathname])
 
   if (isLoading) return null
   if (!isAuthenticated) return <Navigate to="/login" replace />
@@ -44,9 +49,12 @@ const AppLayout = () => {
 
       {/* Sidebar */}
       <aside
-        className={`w-56 flex flex-col fixed inset-y-0 left-0 z-20 border-r transition-transform duration-200
-          ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
-        style={{ backgroundColor: '#09090B', borderColor: '#27272A', paddingTop: '0' }}
+        className={
+          mobileOpen
+            ? "w-56 flex flex-col fixed inset-y-0 left-0 z-20 border-r transition-transform duration-200 translate-x-0"
+            : "w-56 flex flex-col fixed inset-y-0 left-0 z-20 border-r transition-transform duration-200 -translate-x-full md:translate-x-0"
+        }
+        style={{ backgroundColor: '#09090B', borderColor: '#27272A' }}
       >
         {/* Logo - hidden on mobile since top bar has it */}
         <div className="hidden md:block px-5 py-5 border-b" style={{ borderColor: '#27272A' }}>
@@ -106,7 +114,8 @@ const AppLayout = () => {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 md:ml-56 min-h-screen pt-[49px] md:pt-0">
+      <main className="flex-1 md:ml-56 min-h-screen pt-[49px] md:pt-0 relative z-0"
+        style={{ backgroundColor: '#09090B' }}>
         <Outlet />
       </main>
     </div>
