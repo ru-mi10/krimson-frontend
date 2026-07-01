@@ -5,10 +5,11 @@ import {
   Layers, Palette, GitBranch, Activity, Download,
   Plus, Trash2, GripVertical, Sparkles, Globe,
   Clock, GitFork, Eye, ChevronRight, Check, Loader,
-  RotateCcw, Upload
+  RotateCcw, Upload, Code2
 } from 'lucide-react'
 import client from '../api/client'
 import Button from '../components/ui/Button'
+import CodePreviewModal from '../components/CodePreviewModal'
 
 // ── Sidebar sections ───────────────────────────────────────────────────────
 const SECTIONS = [
@@ -42,12 +43,13 @@ const getActivityLabel = (type, metadata) => {
 }
 
 // ── Pages Section ──────────────────────────────────────────────────────────
-const PagesSection = ({ system, pages, setPages }) => {
+const PagesSection = ({ system, pages, setPages, theme }) => {
   const [newPageName, setNewPageName] = useState('')
   const [adding, setAdding] = useState(false)
   const [showInput, setShowInput] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
+  const [codePage, setCodePage] = useState(null)
 
   const addPage = async () => {
     if (!newPageName.trim()) return
@@ -170,6 +172,19 @@ const PagesSection = ({ system, pages, setPages }) => {
                 style={{ color: '#3F3F46' }}>
                 /{page.slug}
               </span>
+              {page.generatedCode && (
+                <span className="text-xs px-1.5 py-0.5 rounded"
+                  style={{ backgroundColor: '#14532D20', color: '#4ADE80' }}>
+                  Coded
+                </span>
+              )}
+              <button onClick={() => setCodePage(page)}
+                className="p-1 rounded transition-colors"
+                style={{ color: '#52525B' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#A1A1AA'}
+                onMouseLeave={e => e.currentTarget.style.color = '#52525B'}>
+                <Code2 size={13} />
+              </button>
               <button onClick={() => deletePage(page.slug, page._id)}
                 disabled={deletingId === page._id}
                 className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded"
@@ -184,6 +199,19 @@ const PagesSection = ({ system, pages, setPages }) => {
           ))
         )}
       </div>
+
+      {codePage && (
+        <CodePreviewModal
+          system={system}
+          page={codePage}
+          theme={theme}
+          onClose={() => setCodePage(null)}
+          onSaved={(updatedPage) => {
+            setPages(prev => prev.map(p => p._id === updatedPage._id ? updatedPage : p))
+            setCodePage(updatedPage)
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -649,7 +677,7 @@ const SystemExplorer = () => {
         <div className="flex-1 p-5 md:p-8 overflow-y-auto">
           <div className="max-w-3xl mx-auto">
             {section === 'pages' && (
-              <PagesSection system={system} pages={pages} setPages={setPages} />
+              <PagesSection system={system} pages={pages} setPages={setPages} theme={theme} />
             )}
             {section === 'theme' && (
               <ThemeSection system={system} theme={theme} setTheme={setTheme} />
