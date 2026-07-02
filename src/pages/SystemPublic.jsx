@@ -61,7 +61,7 @@ const SystemPublic = () => {
     }
   }
 
-  const isOwner = user && system?.ownerId?._id === user._id
+  const isOwner = user && system?.ownerId?._id?.toString() === user._id?.toString()
 
   if (loading) {
     return (

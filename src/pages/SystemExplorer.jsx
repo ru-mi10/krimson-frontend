@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  Layers, Palette, GitBranch, Activity, Download,
+  Layers, Palette, GitBranch, Activity,
   Plus, Trash2, GripVertical, Sparkles, Globe,
   Clock, GitFork, Eye, ChevronRight, Check, Loader,
-  RotateCcw, Upload, Code2
+  RotateCcw, Code2
 } from 'lucide-react'
 import client from '../api/client'
 import Button from '../components/ui/Button'
