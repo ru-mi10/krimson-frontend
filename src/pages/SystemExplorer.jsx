@@ -5,7 +5,7 @@ import {
   Layers, Palette, GitBranch, Activity,
   Plus, Trash2, GripVertical, Sparkles, Globe,
   Clock, GitFork, Eye, ChevronRight, Check, Loader,
-  RotateCcw, Code2
+  RotateCcw, Code2, Download
 } from 'lucide-react'
 import client from '../api/client'
 import Button from '../components/ui/Button'
@@ -548,6 +548,7 @@ const SystemExplorer = () => {
   const [versions, setVersions] = useState([])
   const [loading, setLoading] = useState(true)
   const [publishing, setPublishing] = useState(false)
+  const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -567,8 +568,30 @@ const SystemExplorer = () => {
     load()
   }, [slug])
 
-  const handlePublish = async () => {
-    setPublishing(true)
+  const handleExport = async () => {
+    setExporting(true)
+    try {
+      const token = localStorage.getItem('krimson_token')
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/export/${slug}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      if (!response.ok) throw new Error('Export failed')
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${slug}-krimson.zip`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  const handlePublish = async () => {    setPublishing(true)
     try {
       const { data } = await client.post(`/systems/${slug}/publish`)
       setSystem(data.system)
@@ -629,6 +652,14 @@ const SystemExplorer = () => {
               <Eye size={12} /> View Public
             </button>
           )}
+          <button onClick={handleExport} disabled={exporting}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-colors duration-150 disabled:opacity-40"
+            style={{ borderColor: '#27272A', color: '#A1A1AA', backgroundColor: '#111113' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#3F3F46'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = '#27272A'}>
+            {exporting ? <Loader size={12} className="animate-spin" /> : <Download size={12} />}
+            Export
+          </button>
           {!isPublished && (
             <Button size="sm" loading={publishing} onClick={handlePublish}>
               <Globe size={13} /> Publish
