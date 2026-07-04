@@ -644,22 +644,13 @@ const SystemExplorer = () => {
         </div>
         <div className="flex items-center gap-2">
           {isPublished && (
-            <button onClick={() => navigate(`/systems/${slug}/public`)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-colors duration-150"
-              style={{ borderColor: '#27272A', color: '#A1A1AA', backgroundColor: '#111113' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = '#3F3F46'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = '#27272A'}>
-              <Eye size={12} /> View Public
-            </button>
+            <Button size="sm" variant="ghost" onClick={() => navigate(`/systems/${slug}/public`)}>
+              <Eye size={13} /> View Public
+            </Button>
           )}
-          <button onClick={handleExport} disabled={exporting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-colors duration-150 disabled:opacity-40"
-            style={{ borderColor: '#27272A', color: '#A1A1AA', backgroundColor: '#111113' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#3F3F46'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#27272A'}>
-            {exporting ? <Loader size={12} className="animate-spin" /> : <Download size={12} />}
-            Export
-          </button>
+          <Button size="sm" variant="outline" loading={exporting} onClick={handleExport}>
+            <Download size={13} /> Export
+          </Button>
           {!isPublished && (
             <Button size="sm" loading={publishing} onClick={handlePublish}>
               <Globe size={13} /> Publish

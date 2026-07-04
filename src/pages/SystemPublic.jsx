@@ -1,7 +1,7 @@
 // src/pages/SystemPublic.jsx
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { GitFork, Layers, Eye, Clock, ArrowLeft, Globe, GitBranch, Loader } from 'lucide-react'
+import { GitFork, Layers, Eye, Clock, ArrowLeft, Globe, GitBranch, Loader, Heart } from 'lucide-react'
 import client from '../api/client'
 import Logo from '../components/ui/Logo'
 import Button from '../components/ui/Button'
@@ -27,6 +27,9 @@ const SystemPublic = () => {
   const [forkName, setForkName] = useState('')
   const [showForkModal, setShowForkModal] = useState(false)
   const [forkError, setForkError] = useState('')
+  const [liked, setLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(0)
+  const [liking, setLiking] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -36,6 +39,8 @@ const SystemPublic = () => {
         setPages(data.pages || [])
         setTheme(data.theme)
         setForkName(`${data.system.name} (Fork)`)
+        setLiked(data.isLiked || false)
+        setLikeCount(data.system.stats?.likeCount || 0)
         const vRes = await client.get(`/systems/${slug}/versions`)
         setVersions(vRes.data.versions || [])
       } catch {
@@ -58,6 +63,20 @@ const SystemPublic = () => {
     } catch (err) {
       setForkError(err.response?.data?.message || 'Fork failed')
       setForking(false)
+    }
+  }
+
+  const handleLike = async () => {
+    if (!isAuthenticated) return navigate('/login')
+    setLiking(true)
+    try {
+      const { data } = await client.post(`/systems/${slug}/like`)
+      setLiked(data.liked)
+      setLikeCount(data.likeCount)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLiking(false)
     }
   }
 
@@ -157,9 +176,20 @@ const SystemPublic = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-3 flex-shrink-0">
+            <button onClick={handleLike} disabled={liking || isOwner}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 disabled:opacity-40"
+              style={{
+                border: liked ? '1px solid #DC262660' : '1px solid #3F3F46',
+                backgroundColor: liked ? '#DC262620' : 'transparent',
+                color: liked ? '#FCA5A5' : '#A1A1AA',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = liked ? '#DC2626' : '#71717A'; e.currentTarget.style.color = liked ? '#FCA5A5' : '#FAFAFA' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = liked ? '#DC262660' : '#3F3F46'; e.currentTarget.style.color = liked ? '#FCA5A5' : '#A1A1AA' }}>
+              {liking ? <Loader size={14} className="animate-spin" /> : <Heart size={14} fill={liked ? 'currentColor' : 'none'} />}
+              {likeCount > 0 ? likeCount : ''} {liked ? 'Liked' : 'Like'}
+            </button>
             {isOwner ? (
-              <Button size="md" variant="secondary"
-                onClick={() => navigate(`/systems/${slug}`)}>
+              <Button size="md" variant="outline" onClick={() => navigate(`/systems/${slug}`)}>
                 Open in Explorer
               </Button>
             ) : (
@@ -175,6 +205,7 @@ const SystemPublic = () => {
           {[
             { icon: Layers, value: pages.length, label: 'Pages' },
             { icon: GitFork, value: system?.stats?.forkCount ?? 0, label: 'Forks' },
+            { icon: Heart, value: likeCount, label: 'Likes' },
             { icon: Eye, value: system?.stats?.viewCount ?? 0, label: 'Views' },
             { icon: GitBranch, value: versions.length, label: 'Versions' },
           ].map(({ icon: Icon, value, label }) => (

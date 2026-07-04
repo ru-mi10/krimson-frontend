@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/ui/Logo'
+import useAuth from '../hooks/useAuth'
 
 const SYSTEMS = [
   { name: 'Agency CRM', pages: ['Dashboard', 'Clients', 'Analytics', 'Billing', 'Settings'], category: 'CRM' },
@@ -86,6 +87,7 @@ const SystemCard = ({ system, active }) => (
 
 const Landing = () => {
   const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
   const [activeSystem, setActiveSystem] = useState(0)
   const [mounted, setMounted] = useState(false)
   const intervalRef = useRef(null)
@@ -112,7 +114,9 @@ const Landing = () => {
       {/* Nav */}
       <nav className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5 border-b"
         style={{ borderColor: '#27272A' }}>
-        <Logo size="md" />
+        <button onClick={() => navigate('/')}>
+          <Logo size="md" />
+        </button>
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/explore')}
             className="text-sm px-3 py-1.5 rounded-lg transition-colors duration-150"
@@ -121,20 +125,32 @@ const Landing = () => {
             onMouseLeave={e => e.currentTarget.style.color = '#A1A1AA'}>
             Explore
           </button>
-          <button onClick={() => navigate('/login')}
-            className="text-sm px-3 py-1.5 rounded-lg transition-colors duration-150"
-            style={{ color: '#A1A1AA' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#FAFAFA'}
-            onMouseLeave={e => e.currentTarget.style.color = '#A1A1AA'}>
-            Sign in
-          </button>
-          <button onClick={() => navigate('/register')}
-            className="text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-150"
-            style={{ backgroundColor: '#DC2626', color: '#FAFAFA' }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
-            Get started
-          </button>
+          {isAuthenticated ? (
+            <button onClick={() => navigate('/dashboard')}
+              className="text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-150"
+              style={{ backgroundColor: '#DC2626', color: '#FAFAFA' }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
+              Dashboard
+            </button>
+          ) : (
+            <>
+              <button onClick={() => navigate('/login')}
+                className="text-sm px-3 py-1.5 rounded-lg transition-colors duration-150"
+                style={{ color: '#A1A1AA' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#FAFAFA'}
+                onMouseLeave={e => e.currentTarget.style.color = '#A1A1AA'}>
+                Sign in
+              </button>
+              <button onClick={() => navigate('/register')}
+                className="text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-150"
+                style={{ backgroundColor: '#DC2626', color: '#FAFAFA' }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B91C1C'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#DC2626'}>
+                Get started
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
